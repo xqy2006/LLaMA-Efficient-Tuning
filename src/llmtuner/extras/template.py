@@ -102,15 +102,15 @@ class Template:
         for turn_idx, (query, resp) in enumerate(history):
             if turn_idx == 0:
                 if prefix: # has prefix
-                    prefix_ids = bos_ids + self._convert_inputs_to_ids(tokenizer, context=prefix) + sep_ids
+                    prefix_ids = self._convert_inputs_to_ids(tokenizer, context=prefix) + sep_ids
                 else:
-                    prefix_ids = bos_ids
+                    prefix_ids = []
             else:
-                prefix_ids = sep_ids + bos_ids
+                prefix_ids = sep_ids
 
             query_ids = self._convert_inputs_to_ids(tokenizer, context=self.prompt, query=query, idx=str(turn_idx))
             resp_ids = self._convert_inputs_to_ids(tokenizer, context=[resp])
-            encoded_pairs.append((prefix_ids + query_ids, resp_ids + eos_ids))
+            encoded_pairs.append((prefix_ids + query_ids, resp_ids))
         return encoded_pairs
 
     def _convert_inputs_to_ids(
@@ -163,7 +163,7 @@ class Llama2Template(Template):
                 query = prefix[0] + query
             query_ids = self._convert_inputs_to_ids(tokenizer, context=self.prompt, query=query)
             resp_ids = self._convert_inputs_to_ids(tokenizer, context=[resp])
-            encoded_pairs.append((bos_ids + query_ids, resp_ids + eos_ids))
+            encoded_pairs.append(query_ids, resp_ids))
         return encoded_pairs
 
 
