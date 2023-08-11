@@ -163,7 +163,7 @@ class Llama2Template(Template):
                 query = prefix[0] + query
             query_ids = self._convert_inputs_to_ids(tokenizer, context=self.prompt, query=query)
             resp_ids = self._convert_inputs_to_ids(tokenizer, context=[resp])
-            encoded_pairs.append(query_ids, resp_ids))
+            encoded_pairs.append((query_ids, resp_ids))
         return encoded_pairs
 
 
